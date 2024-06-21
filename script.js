@@ -31,7 +31,7 @@ function calculate() {
     } else {
         result += `<p><strong>Warning!</strong> You need to either save more or increase your income to meet your goal.</p>`;
         // Adding a humorous comment about the reality check
-        result += `<p><em>After checking your aukaad, it seems even a bicycle might be a stretch! 🚴‍♂️😂</em></p>`;
+        result += `<p><em>After checking that, it seems even a bicycle might be a stretch! 🚴‍♂️😂</em></p>`;
     }
 
 
