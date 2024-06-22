@@ -74,6 +74,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const carType = document.getElementById('carType').value;
         const years = parseInt(document.getElementById('years').value);
         const income = parseInt(document.getElementById('income').value);
+        const savingsRate = parseInt(document.getElementById('savingsRate').value) / 100;
+        const currentAge = parseInt(document.getElementById('currentAge').value);
+
     
         const prices = {
             "Bugatti Chiron": 3000000,
@@ -133,6 +136,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const totalCost = prices[carType] + annualCosts[carType] * years;
         const monthlySavings = totalCost / (years * 12);
+        const currentMonthlySavings = (income / 12) * savingsRate;
         const requiredAnnualIncome = monthlySavings * 12 / 0.2;
     
         result = `
@@ -155,5 +159,61 @@ document.addEventListener('DOMContentLoaded', function() {
     
     
         document.getElementById('result').innerHTML = result;
-    }
+    
 
+// Calculate savings over time
+let savings = 0;
+let savingsData = [];
+for (let i = 0; i <= years; i++) {
+    savings += currentMonthlySavings * 12;
+    savingsData.push({
+        age: currentAge + i,
+        savings: savings
+    });
+}
+
+const labels = savingsData.map(data => data.age);
+const dataPoints = savingsData.map(data => (data.savings / totalCost) * 100);
+
+drawChart(labels, dataPoints);
+}
+
+function drawChart(labels, dataPoints) {
+const ctx = document.getElementById('savingsChart').getContext('2d');
+new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: 'Savings Progress (%)',
+            data: dataPoints,
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 2,
+            fill: false
+        }]
+    },
+    options: {
+        scales: {
+            x: {
+                title: {
+                    display: true,
+                    text: 'Age'
+                }
+            },
+            y: {
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: 'Savings Progress (%)'
+                },
+                ticks: {
+                    callback: function(value) {
+                        return value + '%';
+                    }
+                }
+            }
+        }
+    }
+});
+}
